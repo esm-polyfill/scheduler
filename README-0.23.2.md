@@ -7,9 +7,9 @@ Scheduler in ESM format.
 Install:
 
 ```sh
-npm i scheduler@git+file:///home/mk/github/esm-polyfill/scheduler
+npm i scheduler@esm-polyfill/scheduler
 # specific version
-npm i scheduler@git+file:///home/mk/github/esm-polyfill/scheduler#semver:^0.23.2
+npm i scheduler@esm-polyfill/scheduler#semver:^0.23.2
 ```
 
 ## Use 
