@@ -1,8 +1,8 @@
 {
   "name": "@esm-polyfill/scheduler",
-  "description": "Scheduler in ESM format",
+  "description": "scheduler in ESM format",
   "keywords": [
-    "esm", "dom"
+    "react", "esm", "dom"
   ],
   "version": "0.23.2",
   "repository": {
@@ -11,59 +11,39 @@
   },
   "license": "MIT",
   "files": [
-    "scheduler-0.23.2/",
+    "scheduler-0.23.2",
     "package.json",
     "README.md"
   ],
-  "devDependencies": {
-    "esbuild": "^0.23.1",
-    "scheduler-0.23.2": "npm:scheduler@^0.23.2",
-    "scheduler-types-18.3": "npm:@types/scheduler@0.23"
-  },
   "exports": {
     ".": {
       "types": "./scheduler-0.23.2/index.d.ts",
-      "development": {
-        "import": "./scheduler-0.23.2/esm-development/index.js",
-        "require": "./scheduler-0.23.2/cjs-development/index.js"
-      },
-      "production": {
-        "import": "./scheduler-0.23.2/esm-production/index.js",
-        "require": "./scheduler-0.23.2/cjs-production/index.js"
-      },
-      "default": {
-        "import": "./scheduler-0.23.2/esm-production/index.js",
-        "require": "./scheduler-0.23.2/cjs-production/index.js"
+      "import": {
+        "development": "./scheduler-0.23.2/esm-overrides/scheduler.development.js",
+        "default": "./scheduler-0.23.2/esm-overrides/scheduler.production.min.js"
       }
     },
     "./unstable_mock.js": {
-      "development": {
-        "import": "./scheduler-0.23.2/esm-development/unstable_mock.js",
-        "require": "./scheduler-0.23.2/cjs-development/unstable_mock.js"
-      },
-      "production": {
-        "import": "./scheduler-0.23.2/esm-production/unstable_mock.js",
-        "require": "./scheduler-0.23.2/cjs-production/unstable_mock.js"
-      },
-      "default": {
-        "import": "./scheduler-0.23.2/esm-production/unstable_mock.js",
-        "require": "./scheduler-0.23.2/cjs-production/unstable_mock.js"
+      "import": {
+        "development": "./scheduler-0.23.2/esm/scheduler-unstable_mock.development.js",
+        "default": "./scheduler-0.23.2/esm/scheduler-unstable_mock.production.min.js"
       }
     },
     "./unstable_post_task.js": {
-      "development": {
-        "import": "./scheduler-0.23.2/esm-development/unstable_post_task.js",
-        "require": "./scheduler-0.23.2/cjs-development/unstable_post_task.js"
-      },
-      "production": {
-        "import": "./scheduler-0.23.2/esm-production/unstable_post_task.js",
-        "require": "./scheduler-0.23.2/cjs-production/unstable_post_task.js"
-      },
-      "default": {
-        "import": "./scheduler-0.23.2/esm-production/unstable_post_task.js",
-        "require": "./scheduler-0.23.2/cjs-production/unstable_post_task.js"
+      "import": {
+        "development": "./scheduler-0.23.2/esm/scheduler-unstable_post_task.development.js",
+        "default": "./scheduler-0.23.2/esm/scheduler-unstable_post_task.production.min.js"
       }
     },
     "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-replace": "^5.0.7",
+    "glob": "^11.0.0",
+    "scheduler-0.23.2": "npm:scheduler@0.23.2",
+    "@types/scheduler-0.23.2": "npm:@types/scheduler@0.23",
+    "rollup": "^4.22.2"
   }
 }

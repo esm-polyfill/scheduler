@@ -1,6 +1,7 @@
 # @esm-polyfill/scheduler@0.23.2
 
-Scheduler in ESM format.
+[scheduler](https://www.npmjs.com/package/scheduler) in ESM format.
+
 
 ## Install
 
@@ -18,122 +19,146 @@ Reference:
 
 ```ts
 import Scheduler from 'scheduler'
+import * as S from 'scheduler'
 
 // ...
 
 ```
 
-## Internals info
+## How this package was created?
 
-### Main ESM transformation procedure
+
+
+Dependencies for version 0.23.2 in `package.json` was added in
+following manner:
+
+```json
+{
+  "devDependencies": {
+    "...": "...",
+
+    "scheduler-0.23.2": "npm:scheduler@0.23.2",
+    "@types/scheduler-0.23.2": "npm:@types/scheduler@18.3"
+  }
+}
+```
+
+
+Then orginal `package.json`'s, LICENSE's,.. etc. source files 
+were copied to target directory:
+
 
 ```sh
-npm i --save-dev scheduler-0.23.2@npm:scheduler@0.23.2
-npm i --save-dev scheduler-types-0.23@npm:@types/scheduler@0.23
+
+mkdir -p scheduler-0.23.2
+
+# copy .d.ts
+cd node_modules/@types/scheduler-0.23.2
+cp -n --parents *.d.ts ../../../scheduler-0.23.2
+cd ../../../
+
+# copy types license, package.json and readme
+cp -n node_modules/@types/scheduler-0.23.2/package.json scheduler-0.23.2/package-types.json
+cp -n node_modules/@types/scheduler-0.23.2/README.md    scheduler-0.23.2/README-types.md
+cp -n node_modules/@types/scheduler-0.23.2/LICENSE      scheduler-0.23.2/LICENSE-types
+
+# copy js license, package.json and readme
+cp -n node_modules/scheduler-0.23.2/package.json scheduler-0.23.2/package-js.json
+cp -n node_modules/scheduler-0.23.2/README.md    scheduler-0.23.2/README-js.md
+cp -n node_modules/scheduler-0.23.2/LICENSE      scheduler-0.23.2/LICENSE-js
 
 
-mkdir scheduler-0.23.2
 
-cd node_modules/scheduler-types-0.23
-cp --parents *.d.ts **/*.d.ts ../../scheduler-0.23.2
-cd ../../
-cp node_modules/scheduler-types-0.23/package.json scheduler-0.23.2/package-types.json
-
-
-cp node_modules/scheduler-0.23.2/package.json package-0.23.2.json
-cp node_modules/scheduler-0.23.2/package.json scheduler-0.23.2
-cp node_modules/scheduler-0.23.2/README.md scheduler-0.23.2
-cp node_modules/scheduler-0.23.2/LICENSE scheduler-0.23.2
-
-
-npx esbuild node_modules/scheduler-0.23.2/*.js \
-    --outdir=scheduler-0.23.2/esm-development \
-    --bundle \
-    --charset=utf8 \
-    --platform=node \
-    --format=esm \
-    --packages=external \
-    --analyze \
-    --define:process.env.NODE_ENV=\"development\" \
-    --alias:scheduler=@esm-polyfill/scheduler
-
-npx esbuild node_modules/scheduler-0.23.2/*.js \
-    --outdir=scheduler-0.23.2/esm-production \
-    --bundle \
-    --charset=utf8 \
-    --platform=node \
-    --format=esm \
-    --packages=external \
-    --analyze \
-    --define:process.env.NODE_ENV=\"production\" \
-    --alias:scheduler=@esm-polyfill/scheduler
-
-
-npx esbuild node_modules/scheduler-0.23.2/*.js \
-    --outdir=scheduler-0.23.2/cjs-development \
-    --bundle \
-    --charset=utf8 \
-    --platform=node \
-    --format=cjs \
-    --packages=external \
-    --analyze \
-    --define:process.env.NODE_ENV=\"development\" \
-    --alias:scheduler=@esm-polyfill/scheduler
-
-npx esbuild node_modules/scheduler-0.23.2/*.js \
-    --outdir=scheduler-0.23.2/cjs-production \
-    --bundle \
-    --charset=utf8 \
-    --platform=node \
-    --format=cjs \
-    --packages=external \
-    --analyze \
-    --define:process.env.NODE_ENV=\"production\" \
-    --alias:scheduler=@esm-polyfill/scheduler
 ```
 
+Then core cjs files are transformed by rollup
+(see [rollup config file](./rollup.config-0.23.2.mjs)):
 
 
+```sh
 
-### Changes to package.json dependencies
+# transform cjs modules to mjs and save them to scheduler-0.23.2/esm
+# (but only those without conditional requires which will be 
+# transformed manually)
+npx rollup -c rollup.config-0.23.2.mjs
 
+```
 
-#### js oryginal dependencies
+Top level files were manually converted:
+
+```sh
+
+# copy modules which will be transformed manually
+# (top level modules with conditional require's)
+mkdir -p scheduler-0.23.2/production
+cp -n node_modules/scheduler-0.23.2/*.js scheduler-0.23.2/production
+mkdir -p scheduler-0.23.2/development
+cp -n node_modules/scheduler-0.23.2/*.js scheduler-0.23.2/development
+
+# unfortunately esm/scheduler.development.js and esm/scheduler.production.min.js
+# must be manually edited to export namespace.
+mkdir -p scheduler-0.23.2/esm-overrides
+cp -n scheduler-0.23.2/esm/scheduler.*.js scheduler-0.23.2/esm-overrides
+
+```
+
+in every file abowe change:
+
+```js
+
+// from:
+module.exports = require('./cjs/...')
+// to:
+export * from '../esm/...'
+export { default } from '../esm/...'
+
+// and from:
+const Scheduler = require('@esm-polyfill/scheduler')
+// to:
+import * as S from '@esm-polyfill/scheduler'
+
+```
+
+`package.json` was edited to point to new `exports`, `dependencies`
+and `devDependencies`.
 
 ```json
 {
-  "dependencies": {
-    "loose-envify": "^1.1.0"
-  }
-}
-```
-
-#### dts oryginal dependencies
-
-```json
-{
- 
-}
-```
-
-#### esm'ed dependencies
-
-```json
-{
-  "dependencies": {
-    "scheduler": "git+file:///home/mk/github/esm-polyfill/scheduler#semver^0.23.2"
+  "name": "@esm-polyfill/scheduler",
+  "description": "scheduler in ESM format",
+  "keywords": [
+    "react", "esm", "dom"
+  ],
+  "version": "0.23.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esm-polyfill/scheduler"
   },
-  "devDependencies": {
-    "esbuild": "^0.23.1",
-    "scheduler-0.23.2": "npm:scheduler@^0.23.2",
-    "scheduler-types-0.23": "npm:@types/scheduler@0.23"
-  }
+  "license": "MIT",
+  "files": [
+    "scheduler-0.23.2",
+    "package.json",
+    "README"
+  ],
+  "exports": "... nice scoped exports ...",
+  "...": "..."
 }
 ```
 
-Why:
+Why we ended with such dependencies? Because:
 
 * `loose-envify` was used for `production` or `development` 
   contexts, but those was incorporated into package `exports`,
   so is not neccessary.
 
+
+
+## Bugfixes
+
+When fixing bug in polyfill, bugfixed commit must point 
+to the same tag (unfortunately :( ), to do this:
+
+```sh
+git tag v0.23.2 -f
+git push -f --tags
+```
