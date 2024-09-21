@@ -624,24 +624,26 @@ var scheduler_development$1 = {};
 
 
 var scheduler_development			= scheduler_development$1;
-var unstable_IdlePriority			= scheduler_development$1.unstable_IdlePriority;
-var unstable_ImmediatePriority		= scheduler_development$1.unstable_ImmediatePriority;
-var unstable_LowPriority			= scheduler_development$1.unstable_LowPriority;
-var unstable_NormalPriority			= scheduler_development$1.unstable_NormalPriority;
-var unstable_Profiling			 	= scheduler_development$1.unstable_Profiling;
-var unstable_UserBlockingPriority	= scheduler_development$1.unstable_UserBlockingPriority;
-var unstable_cancelCallback			= scheduler_development$1.unstable_cancelCallback;
-var unstable_continueExecution		= scheduler_development$1.unstable_continueExecution;
-var unstable_forceFrameRate			= scheduler_development$1.unstable_forceFrameRate;
-var unstable_getCurrentPriorityLevel= scheduler_development$1.unstable_getCurrentPriorityLevel;
-var unstable_getFirstCallbackNode	= scheduler_development$1.unstable_getFirstCallbackNode;
-var unstable_next			 		= scheduler_development$1.unstable_next;
-var unstable_pauseExecution			= scheduler_development$1.unstable_pauseExecution;
-var unstable_requestPaint			= scheduler_development$1.unstable_requestPaint;
-var unstable_runWithPriority		= scheduler_development$1.unstable_runWithPriority;
-var unstable_scheduleCallback		= scheduler_development$1.unstable_scheduleCallback;
-var unstable_shouldYield			= scheduler_development$1.unstable_shouldYield;
-var unstable_wrapCallback			= scheduler_development$1.unstable_wrapCallback;
+
+var unstable_ImmediatePriority		= scheduler_development.unstable_ImmediatePriority;
+var unstable_UserBlockingPriority	= scheduler_development.unstable_UserBlockingPriority;
+var unstable_NormalPriority			= scheduler_development.unstable_NormalPriority;
+var unstable_IdlePriority			= scheduler_development.unstable_IdlePriority;
+var unstable_LowPriority			= scheduler_development.unstable_LowPriority;
+var unstable_runWithPriority		= scheduler_development.unstable_runWithPriority;
+var unstable_scheduleCallback		= scheduler_development.unstable_scheduleCallback;
+var unstable_next					= scheduler_development.unstable_next;
+var unstable_cancelCallback			= scheduler_development.unstable_cancelCallback;
+var unstable_wrapCallback			= scheduler_development.unstable_wrapCallback;
+var unstable_getCurrentPriorityLevel= scheduler_development.unstable_getCurrentPriorityLevel;
+var unstable_shouldYield			= scheduler_development.unstable_shouldYield;
+var unstable_continueExecution		= scheduler_development.unstable_continueExecution;
+var unstable_pauseExecution			= scheduler_development.unstable_pauseExecution;
+var unstable_getFirstCallbackNode	= scheduler_development.unstable_getFirstCallbackNode;
+var unstable_now					= scheduler_development.unstable_now;
+var unstable_Profiling				= scheduler_development.unstable_Profiling;
+var unstable_forceFrameRate			= scheduler_development.unstable_forceFrameRate;
+var unstable_requestPaint			= scheduler_development.unstable_requestPaint;
 
 export { 
 	scheduler_development as default,
